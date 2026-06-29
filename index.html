@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MailFlow — Smart Gmail Automation</title>
+  <meta name="description" content="MailFlow automatically filters, labels, and organises your Gmail inbox so only what matters reaches you." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f7f6f3;
+      --surface: #ffffff;
+      --text: #1a1a18;
+      --muted: #6b6b67;
+      --subtle: #b0afa9;
+      --accent: #2563eb;
+      --accent-light: #eff4ff;
+      --border: #e4e3de;
+      --radius: 10px;
+      --mono: 'Courier New', monospace;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(247,246,243,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-size: 17px; font-weight: 600; letter-spacing: -0.3px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .logo-icon {
+      width: 28px; height: 28px; background: var(--accent);
+      border-radius: 7px; display: flex; align-items: center;
+      justify-content: center;
+    }
+    .logo-icon svg { width: 16px; height: 16px; fill: white; }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a { font-size: 14px; color: var(--muted); }
+    nav ul a:hover { color: var(--text); text-decoration: none; }
+    .nav-cta {
+      font-size: 13px; font-weight: 500;
+      background: var(--text); color: white;
+      padding: 7px 16px; border-radius: 7px;
+    }
+    .nav-cta:hover { opacity: 0.85; text-decoration: none; }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 760px; margin: 0 auto;
+      padding: 96px 2rem 80px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.04em;
+      text-transform: uppercase; color: var(--accent);
+      background: var(--accent-light);
+      border: 1px solid #bfdbfe;
+      padding: 4px 12px; border-radius: 100px;
+      margin-bottom: 28px;
+    }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 58px);
+      font-weight: 700; letter-spacing: -1.5px;
+      line-height: 1.1; margin-bottom: 20px;
+      color: var(--text);
+    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero p {
+      font-size: 18px; color: var(--muted);
+      max-width: 520px; margin: 0 auto 40px;
+      line-height: 1.65;
+    }
+    .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent); color: white;
+      padding: 12px 28px; border-radius: 9px;
+      font-size: 15px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { opacity: 0.9; text-decoration: none; }
+    .btn-secondary {
+      background: var(--surface); color: var(--text);
+      padding: 12px 28px; border-radius: 9px;
+      font-size: 15px; font-weight: 500;
+      border: 1px solid var(--border);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-secondary:hover { background: var(--bg); text-decoration: none; }
+
+    /* ── INBOX PREVIEW ── */
+    .preview-wrap {
+      max-width: 680px; margin: 0 auto 100px;
+      padding: 0 2rem;
+    }
+    .inbox-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .inbox-header {
+      background: #f1f0ec; border-bottom: 1px solid var(--border);
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .inbox-title {
+      font-size: 12px; color: var(--muted);
+      margin-left: auto; margin-right: auto;
+    }
+    .email-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 13px 16px; border-bottom: 1px solid var(--border);
+      font-size: 13.5px;
+    }
+    .email-row:last-child { border-bottom: none; }
+    .email-row.archived { opacity: 0.38; }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600; flex-shrink: 0; margin-top: 1px;
+    }
+    .email-meta { flex: 1; min-width: 0; }
+    .email-from { font-weight: 600; font-size: 13px; }
+    .email-subject { color: var(--muted); font-size: 12.5px; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tag {
+      font-size: 10.5px; font-weight: 500; padding: 2px 8px;
+      border-radius: 100px; white-space: nowrap; margin-top: 4px;
+      display: inline-block;
+    }
+    .tag-important { background: #eff4ff; color: #1d4ed8; }
+    .tag-archived  { background: #f1f0ec; color: #9c9b96; }
+
+    /* ── FEATURES ── */
+    .section { max-width: 900px; margin: 0 auto; padding: 0 2rem 100px; }
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(24px, 4vw, 34px); font-weight: 700;
+      letter-spacing: -0.8px; line-height: 1.2;
+      margin-bottom: 48px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .feature-icon {
+      width: 38px; height: 38px; border-radius: 9px;
+      background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 14px;
+    }
+    .feature-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .feature-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 7px; }
+    .feature-card p { font-size: 14px; color: var(--muted); line-height: 1.55; }
+
+    /* ── HOW IT WORKS ── */
+    .steps { display: flex; flex-direction: column; gap: 0; }
+    .step {
+      display: flex; gap: 24px; align-items: flex-start;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .step:last-child { border-bottom: none; }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1.5px solid var(--accent);
+      color: var(--accent); font-size: 14px; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .step h3 { font-size: 16px; font-weight: 600; margin-bottom: 5px; }
+    .step p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* ── PERMISSIONS ── */
+    .permissions-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 36px;
+    }
+    .permissions-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+    .permissions-card > p { font-size: 14px; color: var(--muted); margin-bottom: 28px; line-height: 1.6; }
+    .perm-list { display: flex; flex-direction: column; gap: 14px; }
+    .perm-item { display: flex; gap: 14px; align-items: flex-start; }
+    .perm-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: #f0fdf4; border: 1px solid #bbf7d0;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .perm-icon svg { width: 15px; height: 15px; stroke: #15803d; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .perm-name { font-size: 14px; font-weight: 500; }
+    .perm-desc { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .never-list { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .never-list p { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 10px; letter-spacing: 0.03em; }
+    .never-items { display: flex; flex-wrap: wrap; gap: 8px; }
+    .never-item {
+      font-size: 12.5px; color: #b91c1c;
+      background: #fef2f2; border: 1px solid #fecaca;
+      border-radius: 100px; padding: 4px 12px;
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    /* ── PRIVACY ── */
+    .privacy-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .privacy-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 20px;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .privacy-item svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.8; flex-shrink: 0; margin-top: 2px; stroke-linecap: round; stroke-linejoin: round; }
+    .privacy-item p { font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+    .privacy-item strong { display: block; font-size: 14px; color: var(--text); margin-bottom: 3px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 36px 2rem;
+      max-width: 900px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    footer p { font-size: 13px; color: var(--subtle); }
+    footer nav ul { gap: 1.5rem; }
+    footer nav ul a { font-size: 13px; color: var(--subtle); }
+    footer nav ul a:hover { color: var(--muted); }
+
+    @media (max-width: 600px) {
+      nav ul { display: none; }
+      .hero { padding: 64px 1.25rem 56px; }
+      .section { padding: 0 1.25rem 72px; }
+      .preview-wrap { padding: 0 1.25rem; }
+      footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 16 16"><path d="M1 3l7 5 7-5M1 3v9a1 1 0 001 1h12a1 1 0 001-1V3H1z"/></svg>
+    </div>
+    MailFlow
+  </div>
+  <ul>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#permissions">Permissions</a></li>
+    <li><a href="#privacy">Privacy</a></li>
+  </ul>
+  <a href="#get-started" class="nav-cta">Get started</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="2,6 5,9 10,3"/></svg>
+    Personal Gmail automation
+  </div>
+  <h1>Your inbox, <em>finally</em> under control</h1>
+  <p>MailFlow reads your Gmail, filters out noise — OTPs, shopping, newsletters — and surfaces only the emails that actually need your attention.</p>
+  <div class="hero-actions">
+    <a href="#get-started" class="btn-primary">
+      Connect Gmail
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7h10M8 3l4 4-4 4"/></svg>
+    </a>
+    <a href="https://github.com" class="btn-secondary">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><path d="M7 .175c-3.872 0-7 3.128-7 7 0 3.095 2.013 5.71 4.79 6.635.35.066.482-.153.482-.328v-1.181c-1.947.415-2.363-.941-2.363-.941-.328-.81-.787-1.028-.787-1.028-.634-.438.044-.416.044-.416.7.044 1.071.722 1.071.722.635 1.072 1.641.766 2.035.59.066-.459.24-.765.437-.94-1.553-.175-3.193-.787-3.193-3.456 0-.766.262-1.378.721-1.881-.066-.175-.306-.897.066-1.86 0 0 .59-.197 1.925.722a6.754 6.754 0 011.75-.24c.59 0 1.203.087 1.75.24 1.335-.897 1.925-.722 1.925-.722.372.963.132 1.685.066 1.86.46.48.722 1.115.722 1.88 0 2.691-1.641 3.282-3.194 3.457.24.219.481.634.481 1.29v1.926c0 .197.131.394.481.328C11.988 12.884 14 10.27 14 7.175c0-3.872-3.128-7-7-7z"/></svg>
+      View source
+    </a>
+  </div>
+</section>
+
+<!-- INBOX PREVIEW -->
+<div class="preview-wrap">
+  <div class="inbox-card">
+    <div class="inbox-header">
+      <div class="dot" style="background:#ff5f57"></div>
+      <div class="dot" style="background:#febc2e"></div>
+      <div class="dot" style="background:#28c840"></div>
+      <span class="inbox-title">Inbox — filtered view</span>
+    </div>
+
+    <div class="email-row">
+      <div class="avatar" style="background:#eff4ff; color:#1d4ed8;">HR</div>
+      <div class="email-meta">
+        <div class="email-from">TechCorp HR</div>
+        <div class="email-subject">Interview scheduled — Monday 10 AM</div>
+        <span class="tag tag-important">Important</span>
+      </div>
+    </div>
+
+    <div class="email-row">
+      <div class="avatar" style="background:#f0fdf4; color:#15803d;">GH</div>
+      <div class="email-meta">
+        <div class="email-from">GitHub</div>
+        <div class="email-subject">Pull request review requested on main</div>
+        <span class="tag tag-important">Important</span>
+      </div>
+    </div>
+
+    <div class="email-row">
+      <div class="avatar" style="background:#fef9c3; color:#854d0e;">HE</div>
+      <div class="email-meta">
+        <div class="email-from">HackerEarth</div>
+        <div class="email-subject">You qualified for Round 2!</div>
+        <span class="tag tag-important">Contest</span>
+      </div>
+    </div>
+
+    <div class="email-row archived">
+      <div class="avatar" style="background:#f1f0ec; color:#9c9b96;">AM</div>
+      <div class="email-meta">
+        <div class="email-from">Amazon</div>
+        <div class="email-subject">Your order has been shipped</div>
+        <span class="tag tag-archived">Archived · Shopping/Amazon</span>
+      </div>
+    </div>
+
+    <div class="email-row archived">
+      <div class="avatar" style="background:#f1f0ec; color:#9c9b96;">DL</div>
+      <div class="email-meta">
+        <div class="email-from">Duolingo</div>
+        <div class="email-subject">Don't lose your 42-day streak!</div>
+        <span class="tag tag-archived">Archived · Learning</span>
+      </div>
+    </div>
+
+    <div class="email-row archived">
+      <div class="avatar" style="background:#f1f0ec; color:#9c9b96;">G</div>
+      <div class="email-meta">
+        <div class="email-from">Google</div>
+        <div class="email-subject">Your verification code is 847291</div>
+        <span class="tag tag-archived">Archived · Security & OTPs</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <p class="section-label">What it does</p>
+  <h2 class="section-title">Smart filtering, zero configuration</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M7 12h10M10 18h4"/></svg>
+      </div>
+      <h3>Auto-archive noise</h3>
+      <p>OTPs, shipping updates, newsletters, and deals are archived instantly — out of sight, properly labelled.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      </div>
+      <h3>Surface what matters</h3>
+      <p>Interviews, invoices, contest results, and action-required emails are starred and flagged important.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      </div>
+      <h3>Organised labels</h3>
+      <p>Every filtered email lands in a named label — Shopping/Amazon, Security & OTPs, Newsletters — so you can find them later.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
+      </div>
+      <h3>Open source</h3>
+      <p>The full source is on GitHub. No black boxes, no hidden logic — inspect, fork, and extend it however you like.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+      </div>
+      <h3>Custom rules</h3>
+      <p>Add your own sender, subject, or keyword rules in a plain Python list. No GUI, no drag-and-drop, just code.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+      </div>
+      <h3>Run on a schedule</h3>
+      <p>Point a cron job at the script and your inbox is processed automatically — every hour, every morning, your call.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <p class="section-label">How it works</p>
+  <h2 class="section-title">Three steps, then hands-free</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h3>Connect your Gmail account</h3>
+        <p>Sign in with Google. MailFlow requests only the <code>gmail.modify</code> scope — enough to read, label, and archive. It never requests permission to delete emails or send on your behalf.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <h3>Rules run against your inbox</h3>
+        <p>The script fetches your latest emails and checks each one against a set of rules — sender, subject line, and body keywords. Matched emails are labelled and archived. Unmatched emails are checked for importance signals.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <h3>See only what needs your attention</h3>
+        <p>Your inbox shows the emails that actually matter. Everything else is filed away in the right label, still accessible any time from the Gmail sidebar.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>
+        <h3>Optionally, schedule it</h3>
+        <p>Run the script manually whenever you like, or set up a cron job to keep your inbox continuously clean without any effort on your part.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERMISSIONS -->
+<section class="section" id="permissions">
+  <p class="section-label">Permissions</p>
+  <h2 class="section-title">Exactly what's needed, nothing more</h2>
+  <div class="permissions-card">
+    <h3>Scope requested: <code style="font-size:14px; background:#f1f0ec; padding:2px 8px; border-radius:5px;">gmail.modify</code></h3>
+    <p>MailFlow uses a single OAuth scope. Here is a precise breakdown of what that allows and what it does not.</p>
+
+    <div class="perm-list">
+      <div class="perm-item">
+        <div class="perm-icon">
+          <svg viewBox="0 0 15 15"><polyline points="2,7 6,11 13,4"/></svg>
+        </div>
+        <div>
+          <div class="perm-name">Read emails</div>
+          <div class="perm-desc">Fetch message headers (From, Subject, Date) and body snippets to evaluate filter rules.</div>
+        </div>
+      </div>
+      <div class="perm-item">
+        <div class="perm-icon">
+          <svg viewBox="0 0 15 15"><polyline points="2,7 6,11 13,4"/></svg>
+        </div>
+        <div>
+          <div class="perm-name">Add and remove labels</div>
+          <div class="perm-desc">Apply labels like "Shopping/Amazon" or "Security & OTPs", and remove the INBOX label to archive.</div>
+        </div>
+      </div>
+      <div class="perm-item">
+        <div class="perm-icon">
+          <svg viewBox="0 0 15 15"><polyline points="2,7 6,11 13,4"/></svg>
+        </div>
+        <div>
+          <div class="perm-name">Mark as read / Mark as important</div>
+          <div class="perm-desc">Remove the UNREAD label on noise emails; add IMPORTANT and STARRED to emails you should see.</div>
+        </div>
+      </div>
+      <div class="perm-item">
+        <div class="perm-icon">
+          <svg viewBox="0 0 15 15"><polyline points="2,7 6,11 13,4"/></svg>
+        </div>
+        <div>
+          <div class="perm-name">Create labels</div>
+          <div class="perm-desc">Automatically create new labels (e.g. "Shopping/Myntra") the first time a rule fires, if they don't already exist.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="never-list">
+      <p>THIS APP NEVER</p>
+      <div class="never-items">
+        <span class="never-item">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="#b91c1c" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg>
+          Sends emails on your behalf
+        </span>
+        <span class="never-item">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="#b91c1c" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg>
+          Permanently deletes emails
+        </span>
+        <span class="never-item">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="#b91c1c" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg>
+          Reads email attachments
+        </span>
+        <span class="never-item">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="#b91c1c" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg>
+          Stores email content externally
+        </span>
+        <span class="never-item">
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="#b91c1c" stroke-width="2" stroke-linecap="round"><line x1="2" y1="2" x2="9" y2="9"/><line x1="9" y1="2" x2="2" y2="9"/></svg>
+          Shares data with third parties
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section class="section" id="privacy">
+  <p class="section-label">Privacy</p>
+  <h2 class="section-title">Your data stays yours</h2>
+  <div class="privacy-grid">
+    <div class="privacy-item">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div>
+        <strong>Runs locally</strong>
+        <p>The script runs on your own machine. No server, no cloud, no middleman.</p>
+      </div>
+    </div>
+    <div class="privacy-item">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      <div>
+        <strong>Token stored locally</strong>
+        <p>OAuth credentials are saved only to <code style="font-size:12px">token.json</code> on your own disk.</p>
+      </div>
+    </div>
+    <div class="privacy-item">
+      <svg viewBox="0 0 24 24"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
+      <div>
+        <strong>Open source</strong>
+        <p>Every line of code is readable on GitHub. No hidden network calls.</p>
+      </div>
+    </div>
+    <div class="privacy-item">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div>
+        <strong>No data collection</strong>
+        <p>MailFlow does not log, transmit, or store any email content outside your machine.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 MailFlow. Personal Gmail automation tool.</p>
+  <nav>
+    <ul>
+      <li><a href="#privacy">Privacy policy</a></li>
+      <li><a href="#permissions">Terms of use</a></li>
+      <li><a href="https://github.com">GitHub</a></li>
+    </ul>
+  </nav>
+</footer>
+
+</body>
+</html>
