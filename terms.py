@@ -172,6 +172,7 @@
   <ul class="nav-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="privacy.html">Privacy policy</a></li>
+    <li><a href="https://github.com/yourusername/mailflow">GitHub</a></li>
   </ul>
 </nav>
 
@@ -287,7 +288,7 @@
   <ul class="footer-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="privacy.html">Privacy policy</a></li>
-    <li><a href="https://github.com">GitHub</a></li>
+    <li><a href="https://github.com/da-harshilv14/mailflow">GitHub</a></li>
   </ul>
 </footer>
 
