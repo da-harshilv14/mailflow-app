@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Use — MailFlow</title>
+  <meta name="description" content="MailFlow terms of use — conditions for using this open-source Gmail automation tool." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f7f6f3;
+      --surface: #ffffff;
+      --text: #1a1a18;
+      --muted: #6b6b67;
+      --subtle: #b0afa9;
+      --accent: #2563eb;
+      --accent-light: #eff4ff;
+      --border: #e4e3de;
+      --radius: 10px;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(247,246,243,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-size: 17px; font-weight: 600; letter-spacing: -0.3px;
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text); text-decoration: none;
+    }
+    .logo-icon {
+      width: 28px; height: 28px; background: var(--accent);
+      border-radius: 7px; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { width: 16px; height: 16px; fill: white; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--muted); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    .page-wrap {
+      max-width: 720px; margin: 0 auto;
+      padding: 64px 2rem 100px;
+    }
+
+    .page-tag {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 10px; display: block;
+    }
+    h1 {
+      font-size: 36px; font-weight: 700; letter-spacing: -1px;
+      line-height: 1.15; margin-bottom: 12px;
+    }
+    .meta {
+      font-size: 13.5px; color: var(--subtle);
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-card {
+      background: var(--accent-light);
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 48px;
+    }
+    .summary-card h2 {
+      font-size: 15px; font-weight: 600; color: #1d4ed8;
+      margin-bottom: 14px;
+    }
+    .summary-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .summary-list li {
+      font-size: 14px; color: #1e40af;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .summary-list li::before {
+      content: '';
+      display: block; width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%231d4ed8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3,8 6,11 13,4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-size: contain;
+    }
+
+    .content h2 {
+      font-size: 20px; font-weight: 600; letter-spacing: -0.3px;
+      margin-top: 48px; margin-bottom: 14px;
+      padding-top: 48px; border-top: 1px solid var(--border);
+    }
+    .content h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+    .content p { font-size: 15px; color: var(--muted); margin-bottom: 14px; line-height: 1.75; }
+    .content p:last-child { margin-bottom: 0; }
+    .content ul { margin: 10px 0 14px 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .content ul li {
+      font-size: 15px; color: var(--muted); line-height: 1.6;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .content ul li::before { content: '–'; color: var(--subtle); flex-shrink: 0; margin-top: 1px; }
+    .content strong { color: var(--text); font-weight: 500; }
+
+    .highlight-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .highlight-box p { margin: 0; }
+
+    .warning-box {
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .warning-box p { color: #92400e; margin: 0; font-size: 14px; }
+    .warning-box strong { color: #78350f; }
+
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-top: 20px;
+    }
+    .contact-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .contact-card p { font-size: 14px; color: var(--muted); margin: 0; }
+    .contact-card a { font-weight: 500; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 2rem;
+      max-width: 720px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    footer p { font-size: 13px; color: var(--subtle); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: 13px; color: var(--subtle); }
+    .footer-links a:hover { color: var(--muted); }
+
+    @media (max-width: 600px) {
+      .page-wrap { padding: 40px 1.25rem 72px; }
+      h1 { font-size: 28px; }
+      nav .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 16 16"><path d="M1 3l7 5 7-5M1 3v9a1 1 0 001 1h12a1 1 0 001-1V3H1z"/></svg>
+    </div>
+    MailFlow
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="privacy.html">Privacy policy</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+
+  <span class="page-tag">Legal</span>
+  <h1>Terms of Use</h1>
+  <p class="meta">Effective date: June 29, 2026 &nbsp;·&nbsp; Last updated: June 29, 2026</p>
+
+  <div class="summary-card">
+    <h2>The short version</h2>
+    <ul class="summary-list">
+      <li>MailFlow is free and open-source — use it however you like for personal use.</li>
+      <li>You are responsible for your own Google account and how you configure the tool.</li>
+      <li>MailFlow is provided as-is, with no warranty of any kind.</li>
+      <li>We are not liable for any changes to your Gmail inbox caused by your filter rules.</li>
+      <li>You must comply with Google's terms when using the Gmail API through this tool.</li>
+    </ul>
+  </div>
+
+  <div class="content">
+
+    <h2>1. Acceptance of terms</h2>
+    <p>By downloading, installing, or using MailFlow, you agree to these terms of use. If you do not agree, do not use the tool.</p>
+    <p>These terms apply to the open-source MailFlow Gmail automation script and its associated homepage, privacy policy, and documentation.</p>
+
+    <h2>2. What MailFlow is</h2>
+    <p>MailFlow is a free, open-source personal automation tool that connects to your Gmail account via the Gmail API to filter, label, and archive emails based on rules you configure. It is not a commercial product or managed service.</p>
+    <p>The source code is available on GitHub and may be freely inspected, modified, and redistributed under its open-source licence.</p>
+
+    <h2>3. Eligibility</h2>
+    <p>You may use MailFlow if you:</p>
+    <ul>
+      <li>Are at least 13 years of age (or the minimum age required in your country to use Google services).</li>
+      <li>Have a valid Google account with Gmail enabled.</li>
+      <li>Agree to use the tool only for lawful purposes and in accordance with these terms.</li>
+    </ul>
+
+    <h2>4. Your responsibilities</h2>
+    <p>Because MailFlow acts directly on your Gmail inbox, you are solely responsible for:</p>
+    <ul>
+      <li><strong>Your filter rules</strong> — review and test your rules before running them on your full inbox. Misconfigured rules may archive emails you want to keep.</li>
+      <li><strong>Your Google account security</strong> — keep your <code style="font-size:13px; background:#f1f0ec; padding:2px 6px; border-radius:4px;">token.json</code> file secure. Anyone with access to this file can access your Gmail.</li>
+      <li><strong>Backups</strong> — MailFlow does not permanently delete emails (it only archives), but you are responsible for your own data.</li>
+      <li><strong>Compliance with Google's policies</strong> — your use of the Gmail API through MailFlow must comply with <a href="https://developers.google.com/terms" target="_blank">Google's API Terms of Service</a> and <a href="https://policies.google.com/terms" target="_blank">Google's Terms of Service</a>.</li>
+    </ul>
+
+    <div class="warning-box">
+      <p><strong>Important:</strong> MailFlow archives emails by removing the INBOX label. Archived emails are not deleted and remain accessible in All Mail. However, always verify your rules on a small batch of emails before running them at scale.</p>
+    </div>
+
+    <h2>5. Permitted use</h2>
+    <p>MailFlow is intended for personal use only — filtering your own Gmail inbox. You may:</p>
+    <ul>
+      <li>Use MailFlow to filter and organise your own Gmail account.</li>
+      <li>Modify the source code to suit your personal needs.</li>
+      <li>Share the tool with others under its open-source licence.</li>
+      <li>Run the tool on a personal machine or private server for your own use.</li>
+    </ul>
+
+    <h2>6. Prohibited use</h2>
+    <p>You may not use MailFlow to:</p>
+    <ul>
+      <li>Access or modify Gmail accounts that do not belong to you without explicit authorisation.</li>
+      <li>Send unsolicited email, spam, or conduct phishing attacks.</li>
+      <li>Circumvent or violate Google's terms of service or API usage policies.</li>
+      <li>Build a commercial product or service that resells access to others without appropriate Google authorisation and verification.</li>
+      <li>Collect, harvest, or store other people's email data.</li>
+    </ul>
+
+    <h2>7. Gmail API compliance</h2>
+    <p>MailFlow uses the Gmail API under Google's API Terms of Service. As a user, you are responsible for ensuring your use of the Gmail API through MailFlow complies with:</p>
+    <ul>
+      <li><a href="https://developers.google.com/terms" target="_blank">Google APIs Terms of Service</a></li>
+      <li><a href="https://policies.google.com/terms" target="_blank">Google Terms of Service</a></li>
+      <li><a href="https://support.google.com/mail/answer/7126229" target="_blank">Gmail Program Policies</a></li>
+    </ul>
+
+    <h2>8. Disclaimer of warranties</h2>
+    <div class="highlight-box">
+      <p>MailFlow is provided <strong>"as is"</strong> without warranty of any kind, express or implied. We do not warrant that the tool will be error-free, uninterrupted, or produce any particular result in your inbox. Use it at your own discretion.</p>
+    </div>
+
+    <h2>9. Limitation of liability</h2>
+    <p>To the fullest extent permitted by law, the authors and contributors of MailFlow shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of the tool, including but not limited to:</p>
+    <ul>
+      <li>Emails being archived that you intended to keep in your inbox.</li>
+      <li>Loss of access to your Gmail account.</li>
+      <li>Any action taken by Google on your account as a result of API usage.</li>
+      <li>Data loss of any kind.</li>
+    </ul>
+
+    <h2>10. Open-source licence</h2>
+    <p>MailFlow's source code is released under the MIT Licence. You are free to use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software, subject to the licence terms included in the repository.</p>
+    <p>The MIT Licence also means the software is provided without warranty, and the authors are not liable for damages.</p>
+
+    <h2>11. Changes to these terms</h2>
+    <p>We may update these terms from time to time. The updated version will be posted on this page with a revised effective date. Continued use of MailFlow after changes are posted constitutes acceptance of the revised terms.</p>
+
+    <h2>12. Contact</h2>
+    <p>If you have questions about these terms, you can reach us at:</p>
+    <div class="contact-card">
+      <h3>MailFlow</h3>
+      <p>Email: <a href="mailto:your@email.com">your@email.com</a><br/>
+      GitHub: <a href="https://github.com/yourusername/mailflow" target="_blank">github.com/yourusername/mailflow</a></p>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 MailFlow</p>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="privacy.html">Privacy policy</a></li>
+    <li><a href="https://github.com">GitHub</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>
