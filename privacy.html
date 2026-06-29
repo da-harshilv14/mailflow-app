@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — MailFlow</title>
+  <meta name="description" content="MailFlow privacy policy — how your Gmail data is handled." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f7f6f3;
+      --surface: #ffffff;
+      --text: #1a1a18;
+      --muted: #6b6b67;
+      --subtle: #b0afa9;
+      --accent: #2563eb;
+      --accent-light: #eff4ff;
+      --border: #e4e3de;
+      --radius: 10px;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      background: rgba(247,246,243,0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-size: 17px; font-weight: 600; letter-spacing: -0.3px;
+      display: flex; align-items: center; gap: 8px;
+      color: var(--text); text-decoration: none;
+    }
+    .logo-icon {
+      width: 28px; height: 28px; background: var(--accent);
+      border-radius: 7px; display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { width: 16px; height: 16px; fill: white; }
+    .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-links a { font-size: 14px; color: var(--muted); }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    .page-wrap {
+      max-width: 720px; margin: 0 auto;
+      padding: 64px 2rem 100px;
+    }
+
+    .page-tag {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 10px; display: block;
+    }
+    h1 {
+      font-size: 36px; font-weight: 700; letter-spacing: -1px;
+      line-height: 1.15; margin-bottom: 12px;
+    }
+    .meta {
+      font-size: 13.5px; color: var(--subtle);
+      margin-bottom: 48px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-card {
+      background: var(--accent-light);
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 48px;
+    }
+    .summary-card h2 {
+      font-size: 15px; font-weight: 600; color: #1d4ed8;
+      margin-bottom: 14px;
+    }
+    .summary-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .summary-list li {
+      font-size: 14px; color: #1e40af;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .summary-list li::before {
+      content: '';
+      display: block; width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%231d4ed8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3,8 6,11 13,4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-size: contain;
+    }
+
+    .content h2 {
+      font-size: 20px; font-weight: 600; letter-spacing: -0.3px;
+      margin-top: 48px; margin-bottom: 14px;
+      padding-top: 48px; border-top: 1px solid var(--border);
+    }
+    .content h2:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+    .content p { font-size: 15px; color: var(--muted); margin-bottom: 14px; line-height: 1.75; }
+    .content p:last-child { margin-bottom: 0; }
+    .content ul { margin: 10px 0 14px 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .content ul li {
+      font-size: 15px; color: var(--muted); line-height: 1.6;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .content ul li::before {
+      content: '–'; color: var(--subtle); flex-shrink: 0; margin-top: 1px;
+    }
+    .content strong { color: var(--text); font-weight: 500; }
+
+    .highlight-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .highlight-box p { margin: 0; }
+
+    .never-box {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin: 20px 0;
+    }
+    .never-box h3 { font-size: 14px; font-weight: 600; color: #b91c1c; margin-bottom: 10px; }
+    .never-box ul { margin: 0; }
+    .never-box ul li { color: #b91c1c; font-size: 14px; }
+    .never-box ul li::before { color: #fca5a5; }
+
+    .contact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-top: 20px;
+    }
+    .contact-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .contact-card p { font-size: 14px; color: var(--muted); margin: 0; }
+    .contact-card a { font-weight: 500; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 28px 2rem;
+      max-width: 720px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    footer p { font-size: 13px; color: var(--subtle); }
+    .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+    .footer-links a { font-size: 13px; color: var(--subtle); }
+    .footer-links a:hover { color: var(--muted); }
+
+    @media (max-width: 600px) {
+      .page-wrap { padding: 40px 1.25rem 72px; }
+      h1 { font-size: 28px; }
+      nav .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 16 16"><path d="M1 3l7 5 7-5M1 3v9a1 1 0 001 1h12a1 1 0 001-1V3H1z"/></svg>
+    </div>
+    MailFlow
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="terms.html">Terms of use</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrap">
+
+  <span class="page-tag">Legal</span>
+  <h1>Privacy Policy</h1>
+  <p class="meta">Effective date: June 29, 2026 &nbsp;·&nbsp; Last updated: June 29, 2026</p>
+
+  <div class="summary-card">
+    <h2>The short version</h2>
+    <ul class="summary-list">
+      <li>MailFlow runs entirely on your own machine — no servers, no cloud.</li>
+      <li>Your emails are never stored, transmitted, or shared with anyone.</li>
+      <li>We only request the minimum Gmail permission needed to filter your inbox.</li>
+      <li>You can revoke access at any time from your Google account settings.</li>
+      <li>We collect no personal data and run no analytics.</li>
+    </ul>
+  </div>
+
+  <div class="content">
+
+    <h2>1. Who we are</h2>
+    <p>MailFlow is a personal, open-source Gmail automation tool. It is not a company or commercial product. The source code is publicly available on GitHub and can be audited by anyone.</p>
+    <p>This privacy policy describes how MailFlow handles information when you use it to filter your Gmail inbox.</p>
+
+    <h2>2. What data MailFlow accesses</h2>
+    <p>When you authorise MailFlow with your Google account, it accesses the following information from your Gmail mailbox:</p>
+    <ul>
+      <li><strong>Email headers</strong> — the From address, Subject line, and Date of each email.</li>
+      <li><strong>Email snippets</strong> — a short preview of the email body (provided by the Gmail API), used to match keyword-based filter rules.</li>
+      <li><strong>Label information</strong> — the list of labels currently applied to your emails and mailbox.</li>
+    </ul>
+    <p>MailFlow does <strong>not</strong> access the full body text of emails, attachments, contacts, calendar data, Google Drive, or any other Google service.</p>
+
+    <h2>3. How MailFlow uses your data</h2>
+    <p>All data accessed from your Gmail account is used solely to evaluate filter rules locally on your machine. Specifically:</p>
+    <ul>
+      <li>Email headers and snippets are read in memory and compared against your configured rules.</li>
+      <li>Matching emails are labelled and archived within Gmail using the Gmail API.</li>
+      <li>Non-matching emails are checked for importance signals and flagged accordingly.</li>
+    </ul>
+    <div class="highlight-box">
+      <p><strong>All processing happens locally.</strong> MailFlow runs as a script on your own computer. No email content, metadata, or results are sent to any external server, database, or third-party service.</p>
+    </div>
+
+    <h2>4. Data storage</h2>
+    <p>MailFlow stores exactly one file on your machine:</p>
+    <ul>
+      <li><strong>token.json</strong> — your OAuth 2.0 access and refresh tokens, saved locally so you do not have to log in on every run. This file is created in your working directory and never transmitted anywhere.</li>
+    </ul>
+    <p>No email content, no metadata, and no usage logs are written to disk at any point.</p>
+
+    <div class="never-box">
+      <h3>MailFlow never</h3>
+      <ul>
+        <li>Sends or forwards emails on your behalf</li>
+        <li>Permanently deletes any emails</li>
+        <li>Stores email content in any database or file</li>
+        <li>Transmits any data to external servers</li>
+        <li>Shares any information with third parties</li>
+        <li>Runs analytics or tracks usage</li>
+        <li>Accesses your Google account outside of Gmail</li>
+      </ul>
+    </div>
+
+    <h2>5. Google OAuth and permissions</h2>
+    <p>MailFlow requests access to your Gmail account using Google's OAuth 2.0 authorisation flow. The only scope requested is:</p>
+    <div class="highlight-box">
+      <p><code style="font-size:13px; background:#f1f0ec; padding:3px 8px; border-radius:5px;">https://www.googleapis.com/auth/gmail.modify</code></p>
+      <p style="margin-top:10px;">This scope allows MailFlow to read emails and modify labels (add, remove, archive). It does not allow sending emails or permanently deleting them.</p>
+    </div>
+    <p>Your credentials are handled entirely by Google's official OAuth libraries. MailFlow never sees or stores your Google account password.</p>
+
+    <h2>6. Third-party services</h2>
+    <p>MailFlow uses the Google Gmail API to interact with your mailbox. By using MailFlow, your use of Gmail remains subject to <a href="https://policies.google.com/privacy" target="_blank">Google's Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank">Google's Terms of Service</a>.</p>
+    <p>MailFlow itself does not integrate with, transmit data to, or depend on any other third-party service.</p>
+
+    <h2>7. How to revoke access</h2>
+    <p>You can revoke MailFlow's access to your Gmail account at any time:</p>
+    <ul>
+      <li>Go to <a href="https://myaccount.google.com/permissions" target="_blank">myaccount.google.com/permissions</a></li>
+      <li>Find MailFlow in the list of connected apps</li>
+      <li>Click <strong>Remove access</strong></li>
+    </ul>
+    <p>You can also delete the <code style="font-size:13px; background:#f1f0ec; padding:2px 6px; border-radius:4px;">token.json</code> file from your machine to remove locally stored credentials.</p>
+
+    <h2>8. Children's privacy</h2>
+    <p>MailFlow is not directed at children under the age of 13. We do not knowingly collect any personal information from children.</p>
+
+    <h2>9. Changes to this policy</h2>
+    <p>If this privacy policy changes, the updated version will be posted on this page with a new effective date. Because MailFlow collects no data and has no user accounts, we have no way to notify users directly — please check this page periodically if you wish to stay informed.</p>
+
+    <h2>10. Contact</h2>
+    <p>If you have questions about this privacy policy or how MailFlow handles your data, you can reach us at:</p>
+    <div class="contact-card">
+      <h3>MailFlow</h3>
+      <p>Email: <a href="mailto:your@email.com">your@email.com</a><br/>
+      GitHub: <a href="https://github.com/yourusername/mailflow" target="_blank">github.com/yourusername/mailflow</a></p>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 MailFlow</p>
+  <ul class="footer-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="terms.html">Terms of use</a></li>
+    <li><a href="https://github.com">GitHub</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>
